@@ -28,4 +28,6 @@ saveHTMLPath = "C:/Users/Dharam/Downloads/MDCAS Files/MDCAS_ALGO_RAW_VIZ/Oct_7_2
 
 subP <- subplot(style(accPlot, showlegend = TRUE), style(featurePlot, showlegend = TRUE), nrows = 2, margin = 0.05, shareX = TRUE)
 
+### Save the plot as HTML and skip pandoc execution
+
 htmlwidgets::saveWidget(subP, saveHTMLPath, selfcontained = FALSE)
