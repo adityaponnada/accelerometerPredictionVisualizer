@@ -10,7 +10,7 @@ options(digits.secs =3)
 
 #### Read the raw filehead
 
-inPath = "C:/Users/Dharam/Downloads/MDCAS Files/GroundTruthFiles/MDCAS_Ground/RAW_UNLABELED_SPADES_2DAY/SPADES_2/MasterSynced/2015/10/07/03/ActigraphGT9X-AccelerationCalibrated-NA.TAS1E23150075-AccelerationCalibrated.2015-10-07-03-00-00-000-M0400.sensor.csv"
+inPath = "C:/Users/Dharam/Downloads/MDCAS Files/GroundTruthFiles/MDCAS_Ground/RAW_UNLABELED_SPADES_2DAY/SPADES_2/MasterSynced/2015/10/06/12/ActigraphGT9X-AccelerationCalibrated-NA.TAS1E23150075-AccelerationCalibrated.2015-10-06-12-00-00-000-M0400.sensor.csv"
 
 accHour <- read.csv(inPath, sep = ",", header = TRUE)
 
