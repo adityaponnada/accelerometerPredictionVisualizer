@@ -243,7 +243,7 @@ combinedLabels$LABEL_FINAL <- factor(combinedLabels$RESULTING_LABEL, levels =c("
 labelCol <- c("white","red1","lightcyan3","orangered3","green2", "navy", "grey41","gold3")
 
 labelPlot <- plot_ly(combinedLabels, x = ~TIME_STAMP, y = ~RESULTING_PROB, 
-                       name = 'Prediction', type = 'bar', legendgroup = "ALGO", color = ~LABEL_FINAL, 
+                       name = 'Label', type = 'bar', legendgroup = "GAME", color = ~LABEL_FINAL, 
                        colors = labelCol)
 
 
@@ -255,8 +255,9 @@ testPlot <- plot_ly(newLabelhead, x = ~DATE_TIME, y = ~userID, z = ~labelCode, t
 
 
 
-subPlotFinal <- subplot(style(testPlot, showlegend = TRUE),style(accPlot, showlegend = TRUE), style(featurePlot, showlegend = TRUE),  
-                        nrows = 3, margin = 0.05, shareX = TRUE)
+subPlotFinal <- subplot(style(testPlot, showlegend = TRUE),style(labelPlot, showlegend = TRUE),style(featurePlot, showlegend = TRUE), 
+                        style(accPlot, showlegend = TRUE),   
+                        nrows = 4, margin = 0.05, shareX = TRUE)
 
 
 subPlotFinal
