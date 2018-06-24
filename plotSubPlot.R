@@ -42,13 +42,14 @@ labelsDensity <- plot_ly(temCombine, x = ~TIME_STAMP, y = ~BlankProp, type = 'ba
 
 subPlotFinal <- subplot(style(accPlot, showlegend = TRUE),
                         style(labelsDensity, showlegend = TRUE),
+                        style(playPerSecPlot, showlegend = TRUE),
                         style(featurePlot, showlegend = TRUE),
-                        nrows = 3, margin = 0.05, shareX = TRUE)
+                        nrows = 4, margin = 0.05, shareX = TRUE)
 
 
 subPlotFinal
 
 ### Save the plot as HTML and skip pandoc execution
-saveFinalPlot = "C:/Users/Dharam/Downloads/MDCAS Files/MDCAS_ALGO_RAW_VIZ/MTurk_groundTruth_sleep.html"
+saveFinalPlot = "C:/Users/Dharam/Downloads/MDCAS Files/MDCAS_ALGO_RAW_VIZ/MTURK_unlabeled_Sleep.html"
 
 htmlwidgets::saveWidget(subPlotFinal, saveFinalPlot, selfcontained = FALSE)

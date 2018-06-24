@@ -14,7 +14,7 @@ library(reshape2)
 
 startdateTime = accHour$HEADER_TIME_STAMP[1]
 
-labelPath = "C:/Users/Dharam/Downloads/MDCAS Files/MDCAS_ALGO_RAW_VIZ/FromEC2/June-9-2018-1%3A53/https%3A/s3.us-east-2.amazonaws.com/mdcas-signal/data/ADITYA_SED/MasterSynced/2017/11/16/11/labels.csv"
+labelPath = "C:/Users/Dharam/Downloads/MDCAS Files/MDCAS_ALGO_RAW_VIZ/FromEC2/June-20-2018-3%3A17/https%3A/s3.us-east-2.amazonaws.com/mdcas-signal/data/SPADES_1/MasterSynced/2018/01/25/01/labels.csv"
 
 labelFile <- read.csv(labelPath, sep = ",", header = FALSE, skip = 1)
 
