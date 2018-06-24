@@ -14,17 +14,21 @@ library(reshape2)
 
 startdateTime = accHour$HEADER_TIME_STAMP[1]
 
-labelPath = "C:/Users/Dharam/Downloads/MDCAS Files/MDCAS_ALGO_RAW_VIZ/FromEC2/May-7-2018-9%3A07/https%3A/s3.us-east-2.amazonaws.com/mdcas-signal/data/SPADES_2/MasterSynced/2015/10/06/12/labels.csv"
+labelPath = "C:/Users/Dharam/Downloads/MDCAS Files/MDCAS_ALGO_RAW_VIZ/FromEC2/June-9-2018-1%3A53/https%3A/s3.us-east-2.amazonaws.com/mdcas-signal/data/ADITYA_SED/MasterSynced/2017/11/16/11/labels.csv"
 
 labelFile <- read.csv(labelPath, sep = ",", header = FALSE, skip = 1)
 
-labelhead <- head(labelFile, 10)
+#labelhead <- head(labelFile, 10)
 
-labelhead$userID <- c(1:nrow(labelhead))
+colnames(labelFile)[1] <- "userID"
 
-levs <- c("0", "highsignal", "lowsignal", "ambulation", "sedentary", "sleep", "nonwear", "other")
 
-labelFreq <- sapply(labelhead, function(x) table(factor(x, levels = levs, ordered = TRUE)))
+
+#labelFile$userID <- c(1:nrow(labelFile))
+
+levs <- c("0", "blank", "highsignal", "lowsignal", "ambulation", "sedentary", "sleep", "nonwear", "other")
+
+labelFreq <- sapply(labelFile, function(x) table(factor(x, levels = levs, ordered = TRUE)))
 
 labelFreq <- as.data.frame(labelFreq)
 
@@ -32,7 +36,10 @@ labelFreq <- as.data.frame(labelFreq)
 
 #labelhead[ , !c("V3600")]
 
-names(labelhead)[1:3600] <- c(0:3599)
+
+labelFile <- labelFile[, -2]
+
+names(labelFile)[2:3601] <- c(0:3599)
 
 
 
@@ -52,18 +59,20 @@ names(labelhead)[1:3600] <- c(0:3599)
 j = 0
 
 
-for (i in 1:ncol(labelhead)-1){
+for (i in 2:ncol(labelFile)){
   
   tempDateAndTime = startdateTime
   
-  tempDateAndTime = tempDateAndTime + i-1
-  names(labelhead)[i] = as.character(tempDateAndTime)
+  tempDateAndTime = tempDateAndTime + i-2
+  names(labelFile)[i] = as.character(tempDateAndTime)
   
   print(paste0("i is ", i))
   
 }
 
-newLabelhead <- melt(labelhead, id.var = 'userID')
+## Melt the data frame
+
+newLabelhead <- melt(labelFile, id.var = 'userID')
 
 # dat <- data.frame(lapply(dat, function(x) {
 #   gsub("C", 2, x)
@@ -80,7 +89,8 @@ newLabelhead$DATE_TIME <- as.POSIXct(newLabelhead$variable, format = "%Y-%m-%d %
 ## Sleep = 4
 ## Non-wear = 3
 ## Low signal = 2
-## No label = 1
+## Blank = 1
+## No Label = 0
 
 newLabelhead$value <- as.factor(newLabelhead$value)
 
@@ -89,9 +99,14 @@ newLabelhead$value <- as.factor(newLabelhead$value)
 # }))
 
 newLabelhead$labelCode[newLabelhead$value == "0"] <- 0
-newLabelhead$labelCode[newLabelhead$value == "ambulation"] <- 7
+newLabelhead$labelCode[newLabelhead$value == "blank"] <- 1
 newLabelhead$labelCode[newLabelhead$value == "lowsignal"] <- 2
+newLabelhead$labelCode[newLabelhead$value == "nonwear"] <- 3
+newLabelhead$labelCode[newLabelhead$value == "sleep"] <- 4
+newLabelhead$labelCode[newLabelhead$value == "sedentary"] <- 5
 newLabelhead$labelCode[newLabelhead$value == "other"] <- 6
+newLabelhead$labelCode[newLabelhead$value == "ambulation"] <- 7
+newLabelhead$labelCode[newLabelhead$value == "highsignal"] <- 8
 
 
 
@@ -153,11 +168,21 @@ class(combinedLabels)
 head(combinedLabels)
 
 combinedLabels$TIME_STAMP <- NA
-combinedLabels$TIME_STAMP <- names(labelhead)
+combinedLabels <- combinedLabels[-1,]
+head(combinedLabels)
+
+tempLabelFile <- labelFile
+tempLabelFile <- tempLabelFile[,-1]
+
+combinedLabels <- combinedLabels[-1,]
+head(combinedLabels)
+
+combinedLabels$TIME_STAMP <- names(tempLabelFile)
+head(combinedLabels)
 
 # colnames(combinedLabels)[1] <- "TIME_STAMP"
 # 
- colnames(combinedLabels)[1] <- "None"
+#colnames(combinedLabels)[1] <- "None"
 
 ### Convert to date time object
 combinedLabels$TIME_STAMP <- as.POSIXct(combinedLabels$TIME_STAMP, format = "%Y-%m-%d %H:%M:%S")
@@ -165,16 +190,16 @@ combinedLabels$TIME_STAMP <- as.POSIXct(combinedLabels$TIME_STAMP, format = "%Y-
 class(combinedLabels$TIME_STAMP)
 
 
-combinedLabels$RESULTING_LABEL <- NA
-combinedLabels$RESULTING_PROB <- NA
+# combinedLabels$RESULTING_LABEL <- NA
+# combinedLabels$RESULTING_PROB <- NA
 
-combinedLabels$TOTAL_LABELS <- combinedLabels$None + combinedLabels$highsignal + 
+combinedLabels$TOTAL_LABELS <-  combinedLabels$highsignal + 
   combinedLabels$lowsignal + combinedLabels$ambulation +
   combinedLabels$sedentary + combinedLabels$sleep +
-  combinedLabels$nonwear + combinedLabels$other
+  combinedLabels$nonwear + combinedLabels$other + combinedLabels$blank
 
-
-combinedLabels <- combinedLabels[-nrow(combinedLabels),]
+head(combinedLabels)
+#combinedLabels <- combinedLabels[-nrow(combinedLabels),]
 
 noneCount = 0
 highSignalCount = 0
@@ -185,84 +210,28 @@ sleepCount = 0
 nonwearCount = 0
 otherCount = 0
 
-for (i in 1:nrow(combinedLabels)){
-  print(paste0("Inside row number: ", i))
-  
-  
-  storeVals <- c(combinedLabels$None[i], combinedLabels$highsignal[i], combinedLabels$lowsignal[i], combinedLabels$ambulation[i],
-                 combinedLabels$sedentary[i], combinedLabels$sleep[i], combinedLabels$nonwear[i], combinedLabels$other[i])
-  
-  combinedLabels$RESULTING_PROB[i] <- max(storeVals)/combinedLabels$TOTAL_LABELS[i]
-  print(paste0("Highest is: ", combinedLabels$RESULTING_PROB[i]))
-  
-  if (which(storeVals == max(storeVals)) == 1){
-    
-    combinedLabels$RESULTING_LABEL[i] <- "none"
-    print(paste0("Label is: ", combinedLabels$RESULTING_LABEL[i]))
-    
-  } else if (which(storeVals == max(storeVals)) == 2) {
-    combinedLabels$RESULTING_LABEL[i] <- "highsignal"
-    print(paste0("Label is: ", combinedLabels$RESULTING_LABEL[i]))
-    
-  } else if (which(storeVals == max(storeVals)) == 3) {
-    combinedLabels$RESULTING_LABEL[i] <- "lowsignal"
-    print(paste0("Label is: ", combinedLabels$RESULTING_LABEL[i]))
-    
-  } else if (which(storeVals == max(storeVals)) == 4) {
-    combinedLabels$RESULTING_LABEL[i] <- "ambulation"
-    print(paste0("Label is: ", combinedLabels$RESULTING_LABEL[i]))
-    
-  } else if (which(storeVals == max(storeVals)) == 5){
-    combinedLabels$RESULTING_LABEL[i] <- "sedentary"
-    print(paste0("Label is: ", combinedLabels$RESULTING_LABEL[i]))
-    
-  } else if (which(storeVals == max(storeVals)) == 6) {
-    combinedLabels$RESULTING_LABEL[i] <- "sleep"
-    print(paste0("Label is: ", combinedLabels$RESULTING_LABEL[i]))
-    
-  } else if (which(storeVals == max(storeVals)) == 7) {
-    combinedLabels$RESULTING_LABEL[i] <- "nonwear"
-    print(paste0("Label is: ", combinedLabels$RESULTING_LABEL[i]))
-    
-  } else if (which(storeVals == max(storeVals)) == 8) {
-    combinedLabels$RESULTING_LABEL[i] <- "other"
-    print(paste0("Label is: ", combinedLabels$RESULTING_LABEL[i]))
-    
-  }
-  
-  
-}
-
 head(combinedLabels)
 
 
-combinedLabels$LABEL_FINAL <- factor(combinedLabels$RESULTING_LABEL, levels =c("none","highsignal","lowsignal","ambulation","sedentary","sleep","nonwear","other"))
+#combinedLabels$NoneProp <- combinedLabels$None/combinedLabels$TOTAL_LABELS
+combinedLabels$BlankProp <- combinedLabels$blank/combinedLabels$TOTAL_LABELS
+combinedLabels$HighsignalProp <- combinedLabels$highsignal/combinedLabels$TOTAL_LABELS
+combinedLabels$LowsignalProp <- combinedLabels$lowsignal/combinedLabels$TOTAL_LABELS
+combinedLabels$AmbulationProp <- combinedLabels$ambulation/combinedLabels$TOTAL_LABELS
+combinedLabels$SedentaryProp <- combinedLabels$sedentary/combinedLabels$TOTAL_LABELS
+combinedLabels$SleepProp <- combinedLabels$sleep/combinedLabels$TOTAL_LABELS
+combinedLabels$NonwearProp <- combinedLabels$nonwear/combinedLabels$TOTAL_LABELS
+combinedLabels$OtherProp <- combinedLabels$other/combinedLabels$TOTAL_LABELS
 
-##############################
+head(combinedLabels)
+tail(combinedLabels)
 
-labelCol <- c("white","red1","lightcyan3","orangered3","green2", "navy", "grey41","gold3")
+## for ground truth only
 
-labelPlot <- plot_ly(combinedLabels, x = ~TIME_STAMP, y = ~RESULTING_PROB, 
-                       name = 'Label', type = 'bar', legendgroup = "GAME", color = ~LABEL_FINAL, 
-                       colors = labelCol)
+temCombine <- na.omit(combinedLabels)
 
+## for participant data only
+#combinedLabels <- na.omit(combinedLabels)
 
+##combinedLabels$LABEL_FINAL <- factor(combinedLabels$RESULTING_LABEL, levels =c("none","highsignal","lowsignal","ambulation","sedentary","sleep","nonwear","other"))
 
-testPlot <- plot_ly(newLabelhead, x = ~DATE_TIME, y = ~userID, z = ~labelCode, type = "heatmap", 
-                    colors = c("white", "grey41", "skyblue", "navy", "green2", "gold3", "orangered3", "red"),
-                    legendgroup = "GAME")
-
-
-
-
-subPlotFinal <- subplot(style(testPlot, showlegend = TRUE),style(labelPlot, showlegend = TRUE),style(featurePlot, showlegend = TRUE), 
-                        style(accPlot, showlegend = TRUE),   
-                        nrows = 4, margin = 0.05, shareX = TRUE)
-
-
-subPlotFinal
-
-### Save the plot as HTML and skip pandoc execution
-saveFinalPlot = "C:/Users/Dharam/Downloads/MDCAS Files/MDCAS_ALGO_RAW_VIZ/sampleHourCombined.html"
-
-htmlwidgets::saveWidget(subPlotFinal, saveFinalPlot, selfcontained = FALSE)
