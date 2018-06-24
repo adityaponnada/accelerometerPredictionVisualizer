@@ -31,7 +31,7 @@ featuretest <- featureHour
 
 featuretest$MDCAS_PREDICTION  <- factor(featuretest$MDCAS_PREDICTION , levels =c("Nonwear","sleep", "sedentary", "others", "ambulation"))
 
-featureCol <- c("grey41", "skyblue", "navy", "green2", "gold3", "orangered3")
+featureCol <- c("thistle", "skyblue", "navy", "green2", "gold3", "orangered3")
 
 featurePlot <- plot_ly(featuretest, x = ~START_TIME, y = ~MDCAS_PREDICTION_PROB, 
                    name = 'Prediction', type = 'bar', legendgroup = "ALGO", color = ~MDCAS_PREDICTION, 
