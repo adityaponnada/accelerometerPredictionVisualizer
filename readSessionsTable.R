@@ -7,7 +7,7 @@ library(plotly)
 library(plyr)
 
 ### Read sessions file
-sessionsPath = "C:/Users/Dharam/Downloads/MDCAS Files/MDCAS_ALGO_RAW_VIZ/FromEC2/SessionsData/June-20-2018-4%3A00.csv"
+sessionsPath = "C:/Users/Dharam/Downloads/MDCAS Files/MDCAS_ALGO_RAW_VIZ/FromEC2/SessionsData/August-22-2018-9%3A49.csv"
 sessionsData <- read.csv(sessionsPath, sep = ",", header = TRUE)
 
 ### Remove autopilot
@@ -17,19 +17,19 @@ sessionsData <- sessionsData[!sessionsData$autoPilot == "True",]
 ### How many seconds on average did each player play?
 
 ### Total time spent
-sum(sessionsData$sessionLength)/(1000*60)
+sum(sessionsData$sessionLength)/(1000*60) ### 87 minutes total
 
 sessionsData$userID <- as.factor(sessionsData$userID)
 
-length(levels(sessionsData$userID)) ### Total of 49 unique IDs
+length(levels(sessionsData$userID)) ### Total of 79 unique IDs
 
 userSessions <- as.data.frame(summary(sessionsData$userID))
 
 #### Summary of number of levels
 summary(userSessions$`summary(sessionsData$userID)`)
 
-# Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
-# 1.000   3.000   6.000   6.592   8.000  19.000 
+#  Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+#  1.000   2.000   6.000   5.833   7.250  20.000
 
 colnames(userSessions)[1] <- "TotalLevels"
 
@@ -93,6 +93,10 @@ levelSessionLength <- aggregate(levelTime$sessionLength, by=list(Category=levelT
 names(levelSessionLength) <- c("Level", "AverageTime")
 levelSessionLength$AverageTime <- levelSessionLength$AverageTime/1000
 
+levelSessionLengthMedian <- aggregate(levelTime$sessionLength, by=list(Category=levelTime$factoredlevels), FUN=median)
+names(levelSessionLengthMedian) <- c("Level", "MedianTime")
+levelSessionLengthMedian$MedianTime <- levelSessionLengthMedian$MedianTime/1000
+
 
 keepUsers <- c("userID", "currentLevel")
 levelUsers <- sessionsData[, keepUsers]
@@ -111,3 +115,19 @@ userTimeData$x <- userTimeData$x/1000
 
 fit <- density(userTimeData$x)
 timeLengthData <- userTimeData$x
+
+
+#### Total seconds of data played = 5150 seconds
+sum(sessionsData$allSeconds)
+
+#### Total unlabeled sesconds = 1330 seconds
+sum(sessionsData$participantSeconds)
+
+
+keeplabelTime <- c("factoredlevels", "participantSeconds")
+levelLabelTime <- sessionsData[, keeplabelTime]
+
+levelLabelLength <- aggregate(levelLabelTime$participantSeconds, by=list(Category=levelLabelTime$factoredlevels), FUN=sum)
+names(levelLabelLength) <- c("Level", "LabelTime")
+#levelLabelLength$LabelTime <- levelLabelLength$LabelTime/1000
+

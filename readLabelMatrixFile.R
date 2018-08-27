@@ -13,8 +13,11 @@ library(reshape2)
 #startdateTime = as.POSIXct("2017-11-16 11:45:00")
 
 startdateTime = accHour$HEADER_TIME_STAMP[1]
+endDateTime = accHour$HEADER_TIME_STAMP[nrow(accHour)]
 
-labelPath = "C:/Users/Dharam/Downloads/MDCAS Files/MDCAS_ALGO_RAW_VIZ/FromEC2/June-20-2018-3%3A17/https%3A/s3.us-east-2.amazonaws.com/mdcas-signal/data/SPADES_1/MasterSynced/2018/01/25/01/labels.csv"
+labelPath = "C:/Users/Dharam/Downloads/MDCAS Files/MDCAS_ALGO_RAW_VIZ/FromEC2/LeveledLabels/20/August-22-2018-9%3A41/https%3A/s3.us-east-2.amazonaws.com/mdcas-signal/data/SPADES_1/MasterSynced/2017/11/15/18/labels.csv"
+
+#labelPath = "C:/Users/Dharam/Downloads/MDCAS Files/MDCAS_ALGO_RAW_VIZ/FromEC2/August-22-2018-9%3A45/https%3A/s3.us-east-2.amazonaws.com/mdcas-signal/data/SPADES_1/MasterSynced/2017/11/15/18/labels.csv"
 
 labelFile <- read.csv(labelPath, sep = ",", header = FALSE, skip = 1)
 
@@ -26,7 +29,7 @@ colnames(labelFile)[1] <- "userID"
 
 #labelFile$userID <- c(1:nrow(labelFile))
 
-levs <- c("0", "blank", "highsignal", "lowsignal", "ambulation", "sedentary", "sleep", "nonwear", "other")
+levs <- c("0", "blank", "highsignal", "lowsignal", "ambulation", "sedentary", "sleep", "nonwear", "notthese")
 
 labelFreq <- sapply(labelFile, function(x) table(factor(x, levels = levs, ordered = TRUE)))
 
@@ -196,7 +199,7 @@ class(combinedLabels$TIME_STAMP)
 combinedLabels$TOTAL_LABELS <-  combinedLabels$highsignal + 
   combinedLabels$lowsignal + combinedLabels$ambulation +
   combinedLabels$sedentary + combinedLabels$sleep +
-  combinedLabels$nonwear + combinedLabels$other + combinedLabels$blank
+  combinedLabels$nonwear + combinedLabels$notthese + combinedLabels$blank
 
 head(combinedLabels)
 #combinedLabels <- combinedLabels[-nrow(combinedLabels),]
@@ -221,7 +224,7 @@ combinedLabels$AmbulationProp <- combinedLabels$ambulation/combinedLabels$TOTAL_
 combinedLabels$SedentaryProp <- combinedLabels$sedentary/combinedLabels$TOTAL_LABELS
 combinedLabels$SleepProp <- combinedLabels$sleep/combinedLabels$TOTAL_LABELS
 combinedLabels$NonwearProp <- combinedLabels$nonwear/combinedLabels$TOTAL_LABELS
-combinedLabels$OtherProp <- combinedLabels$other/combinedLabels$TOTAL_LABELS
+combinedLabels$NotTheseProp <- combinedLabels$notthese/combinedLabels$TOTAL_LABELS
 
 head(combinedLabels)
 tail(combinedLabels)
@@ -229,6 +232,8 @@ tail(combinedLabels)
 ## for ground truth only
 
 temCombine <- na.omit(combinedLabels)
+
+temCombine <- subset(temCombine, temCombine$TIME_STAMP < endDateTime)
 
 ## for participant data only
 #combinedLabels <- na.omit(combinedLabels)

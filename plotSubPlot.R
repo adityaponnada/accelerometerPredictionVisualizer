@@ -23,13 +23,11 @@ library(reshape2)
 
 
 labelsDensity <- plot_ly(temCombine, x = ~TIME_STAMP, y = ~BlankProp, type = 'bar', name = "Left blank", color = I("black"), legendgroup = "GAME") %>%
-  add_trace(y = ~HighsignalProp, name = 'High Signal', color = I("red")) %>%
-  add_trace(y = ~LowsignalProp, name = 'Low Signal', color = I("grey")) %>%
   add_trace(y = ~AmbulationProp, name = 'Ambulation', color = I("orangered3")) %>%
   add_trace(y = ~SedentaryProp, name = 'Sedentary', color = I("green2")) %>%
   add_trace(y = ~SleepProp, name = 'Sleep', color = I("skyblue")) %>%
   add_trace(y = ~NonwearProp, name = 'Non-wear', color = I("thistle")) %>%
-  add_trace(y = ~OtherProp, name = 'Other', color = I("gold3")) %>%
+  add_trace(y = ~NotTheseProp, name = 'Not These', color = I("gold3")) %>%
   layout(yaxis = list(title = '% of labels'), barmode = 'stack')
 
 
@@ -50,6 +48,6 @@ subPlotFinal <- subplot(style(accPlot, showlegend = TRUE),
 subPlotFinal
 
 ### Save the plot as HTML and skip pandoc execution
-saveFinalPlot = "C:/Users/Dharam/Downloads/MDCAS Files/MDCAS_ALGO_RAW_VIZ/MTURK_unlabeled_Sleep.html"
+saveFinalPlot = "C:/Users/Dharam/Downloads/MDCAS Files/MDCAS_ALGO_RAW_VIZ/Turk_22Aug/Labels/Level_20_SED_NONWEAR_NONE_OF_THESE/RAW_ALGO_LABELS.html"
 
 htmlwidgets::saveWidget(subPlotFinal, saveFinalPlot, selfcontained = FALSE)
