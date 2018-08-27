@@ -14,6 +14,10 @@ levelFreqPlot <- plot_ly(levelSummary, x=~currentLevel,y=~freq, name = "Level fr
 levelTimeSpent <- plot_ly(levelSessionLength, x=~Level,y=~AverageTime, name = "Time spent on level", type = "scatter", mode = 'lines')%>% layout(xaxis = list(title = "Level no."), yaxis = list(title = "Seconds played"),
                                                                                                             title = "Average seconds played per level")
 
+levelTimeSpentMedian <- plot_ly(levelSessionLengthMedian, x=~Level,y=~MedianTime, name = "Time spent on level", type = "scatter", mode = 'lines')%>% layout(xaxis = list(title = "Level no."), yaxis = list(title = "Seconds played"),
+                                                                                                                                                 title = "Median seconds played per level")
+
+
 levelGameResult <- plot_ly(finalLevelResults, y=~VictoryCount, x = ~Level, name = "Results in level", type = "scatter", mode = "lines", name = "Won")%>% 
   add_trace(y=~DefeatCount, name = "Lost", mode = "lines")%>% 
   layout(xaxis = list(title = "Level no."), yaxis = list(title = "Total wins"),title = "Win/loss in each level")
@@ -32,9 +36,14 @@ levelTimeRange <- plot_ly(levelTime, x=~factoredlevels, y=~sessionLength/1000, t
   layout(xaxis = list(title = "Level no."), yaxis = list(title = "Time spent in seconds"),title = "Distribution of time spent in each level")
 
 
+levelLabelRange <- plot_ly(levelLabelTime, x=~factoredlevels, y=~participantSeconds, type = "box")%>%
+  layout(xaxis = list(title = "Level no."), yaxis = list(title = "Seconds labeled in a level"),title = "Distribution of seconds labeled per level")
+
+levelLabelContribution <- plot_ly(levelLabelLength, x=~Level,y=~LabelTime, name = "Seconds contributed per level", type = "scatter", mode = 'lines')%>% layout(xaxis = list(title = "Level no."), yaxis = list(title = "Seconds contributed"),
+                                                                                                                                                         title = "Seconds contributed per level")
 
 # subplot(style(AnkleCountsAllPlot, showlegend = TRUE), style(WristCoountsAllPlot, showlegend = TRUE),
 #         style(uEMAAllPlot, showlegend = TRUE), nrows = 3, margin = 0.05)
 
-subplot(style(levelsPlayed, titleY = T, titleX= T), style(levelFreqPlot, showlegend = FALSE),style(levelTimeSpent, showlegend = FALSE),style(levelGameResult, showlegend = FALSE),
-        style(levelUserPlot, showlegend = FALSE),style(userTimePlot, showlegend = FALSE), nrows = 3, margin = 0.05)
+# subplot(style(levelsPlayed, titleY = T, titleX= T), style(levelFreqPlot, showlegend = FALSE),style(levelTimeSpent, showlegend = FALSE),style(levelGameResult, showlegend = FALSE),
+#         style(levelUserPlot, showlegend = FALSE),style(userTimePlot, showlegend = FALSE), nrows = 3, margin = 0.05)

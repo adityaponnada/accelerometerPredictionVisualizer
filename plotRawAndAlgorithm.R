@@ -29,7 +29,7 @@ accPlot <- plot_ly(accHour, x = ~HEADER_TIME_STAMP, y = ~X_ACCELERATION_METERS_P
 
 featuretest <- featureHour
 
-featuretest$MDCAS_PREDICTION  <- factor(featuretest$MDCAS_PREDICTION , levels =c("Nonwear","sleep", "sedentary", "others", "ambulation"))
+featuretest$MDCAS_PREDICTION  <- factor(featuretest$MDCAS_PREDICTION , levels =c("Nonwear","sleep", "sedentary", "notthese", "ambulation"))
 
 featureCol <- c("thistle", "skyblue", "navy", "green2", "gold3", "orangered3")
 
@@ -43,7 +43,7 @@ featurePlot <- plot_ly(featuretest, x = ~START_TIME, y = ~MDCAS_PREDICTION_PROB,
 
 #saveHTMLPath = "C:/Users/Dharam/Downloads/MDCAS Files/MDCAS_ALGO_RAW_VIZ/SEDENTARY_GROUND_TRUTH.html"
 
-#subP <- subplot(style(accPlot, showlegend = TRUE), style(featurePlot, showlegend = TRUE), nrows = 2, margin = 0.05, shareX = TRUE)
+subP <- subplot(style(accPlot, showlegend = TRUE), style(featurePlot, showlegend = TRUE), nrows = 2, margin = 0.05, shareX = TRUE)
 
 ### Save the plot as HTML and skip pandoc execution
 
@@ -57,3 +57,8 @@ featurePlot <- plot_ly(featuretest, x = ~START_TIME, y = ~MDCAS_PREDICTION_PROB,
 #       list(target = 6, value = list(marker =list(color = 'red'))),
 #       list(target = 8, value = list(marker =list(color = 'black')))
 #     )))
+
+
+saveCombo = "C:/Users/Dharam/Downloads/MDCAS Files/MDCAS_ALGO_RAW_VIZ/AMB_SLEEP_NONWEAR_2/AMB_SLEEP_NONWEAR_2.html"
+
+htmlwidgets::saveWidget(subP, saveCombo, selfcontained = FALSE)
