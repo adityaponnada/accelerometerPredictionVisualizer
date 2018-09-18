@@ -40,14 +40,15 @@ labelsDensity <- plot_ly(temCombine, x = ~TIME_STAMP, y = ~BlankProp, type = 'ba
 
 subPlotFinal <- subplot(style(accPlot, showlegend = TRUE),
                         style(labelsDensity, showlegend = TRUE),
+                        style(labelPropPlot, showlegend = TRUE),
                         style(playPerSecPlot, showlegend = TRUE),
                         style(featurePlot, showlegend = TRUE),
-                        nrows = 4, margin = 0.05, shareX = TRUE)
+                        nrows = 5, margin = 0.05, shareX = TRUE)
 
 
 subPlotFinal
 
 ### Save the plot as HTML and skip pandoc execution
-saveFinalPlot = "C:/Users/Dharam/Downloads/MDCAS Files/MDCAS_ALGO_RAW_VIZ/Turk_22Aug/Labels/Level_20_SED_NONWEAR_NONE_OF_THESE/RAW_ALGO_LABELS.html"
+saveFinalPlot = "C:/Users/Dharam/Downloads/MDCAS Files/MDCAS_ALGO_RAW_VIZ/Turk_Sept10/Results/Labels/AllLevelsWithEstimatedLabel.html"
 
 htmlwidgets::saveWidget(subPlotFinal, saveFinalPlot, selfcontained = FALSE)

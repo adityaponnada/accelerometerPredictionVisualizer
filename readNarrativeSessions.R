@@ -2,7 +2,7 @@ library(psych)
 library(MASS)
 
 
-narrativeSession <- read.csv("C:/Users/Dharam/Downloads/MDCAS Files/MDCAS_ALGO_RAW_VIZ/FromEC2/Narrative/August-23-2018-2%3A35.csv", sep = ",", header = TRUE)
+narrativeSession <- read.csv("C:/Users/Dharam/Downloads/MDCAS Files/MDCAS_ALGO_RAW_VIZ/Turk_Sept10/Narrative/September-11-2018-3%3A40.csv", sep = ",", header = TRUE)
 
 sum(narrativeSession$seconds)/60
 

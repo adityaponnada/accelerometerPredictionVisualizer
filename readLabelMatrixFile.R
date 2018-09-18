@@ -15,7 +15,8 @@ library(reshape2)
 startdateTime = accHour$HEADER_TIME_STAMP[1]
 endDateTime = accHour$HEADER_TIME_STAMP[nrow(accHour)]
 
-labelPath = "C:/Users/Dharam/Downloads/MDCAS Files/MDCAS_ALGO_RAW_VIZ/FromEC2/LeveledLabels/20/August-22-2018-9%3A41/https%3A/s3.us-east-2.amazonaws.com/mdcas-signal/data/SPADES_1/MasterSynced/2017/11/15/18/labels.csv"
+##labelPath = "C:/Users/Dharam/Downloads/MDCAS Files/MDCAS_ALGO_RAW_VIZ/FromEC2/LeveledLabels/20/August-22-2018-9%3A41/https%3A/s3.us-east-2.amazonaws.com/mdcas-signal/data/SPADES_1/MasterSynced/2017/11/15/18/labels.csv"
+labelPath = "C:/Users/Dharam/Downloads/MDCAS Files/MDCAS_ALGO_RAW_VIZ/Turk_Sept10/Labels/AllLabels/September-10-2018-2%3A24/https%3A/s3.us-east-2.amazonaws.com/mdcas-signal/data/SPADES_1/MasterSynced/2017/11/15/17/labels.csv"
 
 #labelPath = "C:/Users/Dharam/Downloads/MDCAS Files/MDCAS_ALGO_RAW_VIZ/FromEC2/August-22-2018-9%3A45/https%3A/s3.us-east-2.amazonaws.com/mdcas-signal/data/SPADES_1/MasterSynced/2017/11/15/18/labels.csv"
 
