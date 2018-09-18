@@ -7,7 +7,8 @@ library(plotly)
 library(plyr)
 
 ### Read sessions file
-sessionsPath = "C:/Users/Dharam/Downloads/MDCAS Files/MDCAS_ALGO_RAW_VIZ/FromEC2/SessionsData/August-22-2018-9%3A49.csv"
+#sessionsPath = "C:/Users/Dharam/Downloads/MDCAS Files/MDCAS_ALGO_RAW_VIZ/FromEC2/SessionsData/August-22-2018-9%3A49.csv"
+sessionsPath = "C:/Users/Dharam/Downloads/MDCAS Files/MDCAS_ALGO_RAW_VIZ/Turk_Sept10/Sessions/September-11-2018-3%3A23.csv"
 sessionsData <- read.csv(sessionsPath, sep = ",", header = TRUE)
 
 ### Remove autopilot

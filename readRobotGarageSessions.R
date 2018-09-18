@@ -1,7 +1,7 @@
 library(psych)
 library(MASS)
 
-robotGarageSessions <- read.csv("C:/Users/Dharam/Downloads/MDCAS Files/MDCAS_ALGO_RAW_VIZ/FromEC2/RobotGarage/August-22-2018-9%3A51.csv", sep = ",", header = TRUE)
+robotGarageSessions <- read.csv("C:/Users/Dharam/Downloads/MDCAS Files/MDCAS_ALGO_RAW_VIZ/Turk_Sept10/RobotGarage/September-11-2018-3%3A28.csv", sep = ",", header = TRUE)
 
 
 robotGarageSessions$userID <- as.factor(robotGarageSessions$userID)
